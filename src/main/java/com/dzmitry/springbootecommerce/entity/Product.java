@@ -1,7 +1,6 @@
 package com.dzmitry.springbootecommerce.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,8 +10,7 @@ import java.sql.Date;
 
 @Entity
 @Table(name="product")
-@Getter
-@Setter
+@Data
 public class Product {
 
     @Id
