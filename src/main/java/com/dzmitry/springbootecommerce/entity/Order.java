@@ -1,10 +1,10 @@
 package com.dzmitry.springbootecommerce.entity;
 
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.context.annotation.EnableMBeanExport;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,11 +14,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
-@Data
+@Getter
+@Setter
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @Column(name = "order_tracking_number")
     private String orderTrackingNumber;
@@ -28,9 +30,9 @@ public class Order {
     private BigDecimal totalPrice;
     @Column(name = "status")
     private String status;
-    @Column(name = "date_credited")
+    @Column(name = "date_created")
     @CreationTimestamp
-    private Date dateCredited;
+    private Date dateCreated;
     @Column(name = "last_updated")
     @UpdateTimestamp
     private Date lastUpdated;
@@ -38,7 +40,7 @@ public class Order {
     private Set<OrderItem> orderItems = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "custumer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -59,6 +61,4 @@ public class Order {
             item.setOrder(this);
         }
     }
-
-    //private Customer customer;
 }
