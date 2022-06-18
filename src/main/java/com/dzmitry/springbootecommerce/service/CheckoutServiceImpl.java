@@ -29,20 +29,34 @@ public class CheckoutServiceImpl implements CheckoutService{
 
         // retrieve the order info from dto
         Order order = purchase.getOrder();
+
         // generate tracking number
         String orderTrackingNumber = generateOrderTrackingNumber();
         order.setOrderTrackingNumber(orderTrackingNumber);
+
         // populate order with orderitems
         Set<OrderItem> orderItems = purchase.getOrderItems();
         orderItems.forEach(item -> order.add(item));
+
         // populate order with billing Addres and shipping address
         order.setBillingAddress(purchase.getBillingAddress());
         order.setShippingAddress(purchase.getShippingAddress());
+
         // populate customer with order
         Customer customer = purchase.getCustomer();
+
+        // check if this is an existing customer
+        String theEmail = customer.getEmail();
+        Customer customerFromDB = customerRepository.findByEmail(theEmail);
+        if(customerFromDB!=null){
+            // we found them .. let's assign them accordingly
+            customer = customerFromDB;
+        }
         customer.add(order);
+
         // save to the DB
         customerRepository.save(customer);
+
         //return a response
         return new PurchaseResponse(orderTrackingNumber);
     }
